@@ -959,12 +959,3 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 } else {
 	window.C3PhotoCrop = C3PhotoCrop;
 }
-
-/*export {
-	_C3PhotoCropInstance:null,
-	crop: function (option) {
-		if(_C3PhotoCropInstance==null)
-			_C3PhotoCropInstance=new _C3PhotoCropInstance();
-		_C3PhotoCropInstance.crop(option);
-	}
-}*/
