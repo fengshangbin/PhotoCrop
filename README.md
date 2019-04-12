@@ -6,7 +6,7 @@ GitHub Pages: https://github.com/fengshangbin/ListView
 
 # 设计理念
 
-不依赖第三方框架，也无不侵入，功能全面，使用方便
+不依赖第三方框架，也无侵入，功能全面，使用方便
 
 # 特点及优势
 
