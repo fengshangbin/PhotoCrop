@@ -1,0 +1,43 @@
+<div class="crop-mask"></div>
+<div class="crop-window crop-center photocrop-disable-select">
+  <div class="crop-heard">
+    <div class="photocropbutton" id="crop_close_btn"></div>
+    <span data-i18n="title">Crop Photo</span>
+    <div class="photocropbutton" id="crop_done_btn"></div>
+  </div>
+  <div class="crop-body">
+    <img id="crop_photo_bg" />
+    <div id="crop_drag" class="crop-box crop-drag"></div>
+    <div id="crop_area" class="crop-box">
+      <div class="crop_area_box">
+        <img id="crop_photo_inner" class="crop-box photocropoverlay" />
+      </div>
+      <div class="crop_line_horizontal photocropoverlay"></div>
+      <div class="crop_line_vertical photocropoverlay"></div>
+      <div class="crop_line_t"></div>
+      <div class="crop_line_r"></div>
+      <div class="crop_line_b"></div>
+      <div class="crop_line_l"></div>
+      <div class="crop_coner_lt"></div>
+      <div class="crop_coner_rt"></div>
+      <div class="crop_coner_lb"></div>
+      <div class="crop_coner_rb"></div>
+    </div>
+    <div id="crop_input_photo_tip" contenteditable><span data-i18n="tipMobile">Drop image here or click browse</span></div>
+  </div>
+  <div class="crop-tool">
+    <input type="radio" id="full_photo_radio" /><label id="full_photo_label" data-i18n="full">Full Photo</label>
+    <div class="photocropbutton" id="crop_change_btn"></div>
+    <div class="photocropbutton" id="crop_rotate_btn"></div>
+    <div class="photocropbutton" id="crop_big_btn"></div>
+    <div class="photocropbutton" id="crop_small_btn"></div>
+    <div class="photocropbutton" id="crop_restore_btn"></div>
+    <div>
+      <div class="photocropbutton" id="crop_ratio_btn"></div>
+      <ul id="crop_ratio_select" class="photocrop-disable-select photocrop-hide">
+        <li data-ratio="-1" data-i18n="free">Free ratio</li>
+        <li data-ratio="0" data-i18n="origin">Origin ratio</li>
+      </ul>
+    </div>
+  </div>
+</div>

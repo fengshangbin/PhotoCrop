@@ -1,47 +1,159 @@
-<!doctype html>
+﻿<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0" />
-<title>Drag Demo</title>
-<script src="zepto.min.js"></script>
-<script src="../dist/c3photocrop.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0" />
+    <title>Drag Demo</title>
+    <style>
+      .box {
+        margin: 10px;
+      }
+      .photo {
+        margin: 5px;
+        position: relative;
+        display: inline-block;
+      }
+      .photo span {
+        display: block;
+        width: 100%;
+        height: 20px;
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #eee;
+        font-size: 12px;
+        text-align: center;
+        position: absolute;
+        bottom: 0;
+      }
+    </style>
+    <script src="dist/c3photocrop.js"></script>
+  </head>
 
-<body>
-<img id="testCrop" />
-<img id="testCropThumb" />
-<input type="button" value="+" id="addPhotoBtn" />
-<input type="button" value="+2" id="addPhotoBtn2" />
-	<script>
-		$(function(){
-			$("#addPhotoBtn").on("click",function(){
-				C3PhotoCrop.crop({
-					cropSize:"700x0",
-					photoExt:"png",
-					success:function(data){
-						console.log(data);
-						$("#testCrop").attr("src","data:image/jpeg;base64,"+data.data);
-						if(data.thumb!=null)
-							$("#testCropThumb").attr("src","data:image/jpeg;base64,"+data.thumb);
-					},
-				});
-			})
-			$("#addPhotoBtn2").on("click",function(){
-				C3PhotoCrop.crop({
-					cropSize:"700x0",
-					thumbSize:"120x120",
-					success:function(data){
-						console.log(data);
-						$("#testCrop").attr("src","data:image/jpeg;base64,"+data.data);
-						if(data.thumb!=null)
-							$("#testCropThumb").attr("src","data:image/jpeg;base64,"+data.thumb);
-					},
-				});
-			})
-			//http://wf.hklzm.cma.shcn.c3-iris.com/uploads/2017-09-23/adbf907e-ce09-4e22-ba5c-287d9f2b49f1.jpg
-			$("#addPhotoBtn").click();
-		})
-	</script>
-</body>
+  <body>
+    <div class="box">
+      1, 固定尺寸<br />
+      <input type="button" value="300x250" id="addPhotoBtn1" /><br />
+      <script>
+        document.getElementById('addPhotoBtn1').addEventListener('click', function() {
+          var btn = this;
+          C3PhotoCrop.crop({
+            cropSize: '300x250',
+            success: function(data) {
+              addPhoto(btn, data);
+            }
+          });
+        });
+      </script>
+    </div>
+    <div class="box">
+      2, 不固定尺寸<br />
+      <input type="button" value="300x250" id="addPhotoBtn2" /><br />
+      <script>
+        document.getElementById('addPhotoBtn2').addEventListener('click', function() {
+          var btn = this;
+          C3PhotoCrop.crop({
+            cropSize: '300x',
+            success: function(data) {
+              addPhoto(btn, data);
+            }
+          });
+        });
+      </script>
+    </div>
+    <div class="box">
+      3, 附加缩略图<br />
+      <input type="button" value="300x250" id="addPhotoBtn3" /><br />
+      <script>
+        document.getElementById('addPhotoBtn3').addEventListener('click', function() {
+          var btn = this;
+          C3PhotoCrop.crop({
+            cropSize: '300x',
+            thumbSize: '100x100',
+            success: function(data) {
+              addPhoto(btn, data);
+            }
+          });
+        });
+      </script>
+    </div>
+    <div class="box">
+      4, 设置默认图<br />
+      <input type="button" value="300x250" id="addPhotoBtn4" /><br />
+      <script>
+        document.getElementById('addPhotoBtn4').addEventListener('click', function() {
+          var btn = this;
+          C3PhotoCrop.crop({
+            cropSize: '300x',
+            thumbSize: '100x100',
+            defaultPhoto: 'http://wf.hklzm.cma.shcn.c3-iris.com.cn/uploads/2018-07-07/187eeb37-b15d-44bc-8860-7148236086e5.jpg',
+            success: function(data) {
+              addPhoto(btn, data);
+            }
+          });
+        });
+      </script>
+    </div>
+    <div class="box">
+      5, lite模式<br />
+      <input type="button" value="300x250" id="addPhotoBtn5" /><br />
+      <script>
+        document.getElementById('addPhotoBtn5').addEventListener('click', function() {
+          var btn = this;
+          C3PhotoCrop.crop({
+            cropSize: '300x',
+            thumbSize: '100x100',
+            liteMode: true,
+            success: function(data) {
+              addPhoto(btn, data);
+            }
+          });
+        });
+      </script>
+    </div>
+    <div class="box">
+      6, 多图模式<br />
+      <input type="button" value="300x250" id="addPhotoBtn6" /><br />
+      <script>
+        document.getElementById('addPhotoBtn6').addEventListener('click', function() {
+          var btn = this;
+          C3PhotoCrop.crop({
+            cropSize: '300x',
+            thumbSize: '100x100',
+            liteMode: true,
+            multiple: true,
+            success: function(data) {
+              for (var i = 0; i < data.length; i++) {
+                addPhoto(btn, data[i]);
+              }
+            }
+          });
+        });
+      </script>
+    </div>
+    <script>
+      function addPhoto(btn, data) {
+        console.log(data);
+        var photo = document.createElement('div');
+        photo.className = 'photo';
+        var img = new Image();
+        img.src = 'data:image/jpeg;base64,' + (data.thumb || data.data);
+        photo.appendChild(img);
+        //if (data.originalFile) {
+        var span = document.createElement('span');
+        span.innerText = '编辑';
+        photo.appendChild(span);
+        span.addEventListener('click', function() {
+          C3PhotoCrop.crop({
+            cropSize: '300x',
+            thumbSize: '100x100',
+            defaultPhoto: data.originalFile,
+            success: function(data) {
+              img.src = 'data:image/jpeg;base64,' + (data.thumb || data.data);
+            }
+          });
+        });
+        //}
+        btn.parentNode.insertBefore(photo, btn);
+      }
+    </script>
+  </body>
 </html>

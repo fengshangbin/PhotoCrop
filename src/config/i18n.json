@@ -1,0 +1,8 @@
+{
+  "title": { "cn": "图片裁剪", "en": "Crop Photo" },
+  "tip": { "cn": "拖拽图片或点击浏览，也可以右键粘贴", "en": "Drop image here or click browse, also can right-paste" },
+  "tipMobile": { "cn": "点击选择本地图片", "en": "click to select photo" },
+  "full": { "cn": "高清原图", "en": "Full Photo" },
+  "free": { "cn": "自由比例", "en": "Free ratio" },
+  "origin": { "cn": "原始比例", "en": "Origin ratio" }
+}
