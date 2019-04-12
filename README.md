@@ -70,3 +70,7 @@ var defaultOption = {
     originalFile //裁剪图片源
   }
 ```
+
+# 许可
+
+MIT 许可
