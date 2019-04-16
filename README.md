@@ -55,6 +55,7 @@ var defaultOption = {
   supportRatio: true, //是否支持自选宽高比
   ratio: ['1:1', '1:2', '2:3'], //自选宽高比的选项
   fullshow: true, //是否强制填满裁剪区域
+  title: null, //标题
   gap: 20, //边距
   mimimum: 20
 };

@@ -66,12 +66,15 @@ function changeLanguage(lan) {
   var i18nViews = view.querySelectorAll('[data-i18n]');
   for (var i = 0; i < i18nViews.length; i++) {
     var i18nView = i18nViews[i];
-    var key = i18nView.getAttribute('data-i18n');
-    var targetLan = i18n[key][lan];
-    if (targetLan == null) targetLan = i18n[key]['en'];
-    i18nView.innerHTML = targetLan;
+    setI18nView(i18nView, lan);
   }
   currentLanguage = lan;
+}
+function setI18nView(i18nView, lan) {
+  var key = i18nView.getAttribute('data-i18n');
+  var targetLan = i18n[key][lan];
+  if (targetLan == null) targetLan = i18n[key]['en'];
+  i18nView.innerHTML = targetLan;
 }
 
 export function open(options) {
@@ -156,6 +159,8 @@ export function open(options) {
   } else {
     menuUI.reset(hideHiRes, hideZoom, hideRatio, options.ratio);
     changeLanguage(options.language);
+    if (options.title) view.querySelector('.crop-heard span').innerHTML = options.title;
+    else setI18nView(view.querySelector('.crop-heard span'), options.language);
     document.body.appendChild(view);
     cropUI.onCropAreaShow();
   }

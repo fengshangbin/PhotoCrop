@@ -11,6 +11,7 @@ export var defaultOption = {
   supportRatio: true,
   ratio: ['1:1', '1:2', '2:3'],
   fullshow: true,
+  title: null,
   gap: 20,
   mimimum: 20
 };
