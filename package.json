@@ -19,13 +19,13 @@
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.2",
-    "webpack-cli": "^3.1.2",
+    "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.1.14"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --open --env dev --host 10.0.0.227",
-    "build": "webpack --env pro"
+    "start": "webpack-dev-server --open --mode development --host 10.0.0.227",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",

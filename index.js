@@ -7,3 +7,7 @@ export function crop(options) {
   options = extend(defaultOption, options);
   open(options);
 }
+
+/* module.exports = {
+  crop: crop
+}; */

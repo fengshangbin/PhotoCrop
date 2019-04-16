@@ -14,6 +14,7 @@ var tw = 0,
   th = 0; //图片当前显示的宽高
 var tx = 0,
   ty = 0; //图片当前显示的坐标
+var orientation = 0;
 var rotate = 0; //图片旋转角度
 var ratio = 0; //裁剪区域宽高比
 var oscale = 0; //原始图片宽高比
@@ -46,7 +47,7 @@ function init(option) {
 }
 
 function restorePhoto(_rotate) {
-  rotate = _rotate ? _rotate : 0;
+  rotate = _rotate ? _rotate : orientation;
 
   if (ow == 0 || oh == 0) return;
 
@@ -133,10 +134,14 @@ function setCropSize(_cw, _ch) {
   ch = _ch - gap * 2;
   restorePhoto();
 }
-function setPhotoSize(_ow, _oh) {
+function setPhotoSize(_ow, _oh, _orientation) {
   ow = _ow;
   oh = _oh;
   oscale = ow / oh;
+  if (_orientation == 3) orientation = 180;
+  else if (_orientation == 6) orientation = 90;
+  else if (_orientation == 8) orientation = -90;
+  else orientation = 0;
   restorePhoto();
 }
 function setPhotoRatio(_ratio) {

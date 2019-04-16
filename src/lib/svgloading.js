@@ -85,8 +85,8 @@ var SVGLoading = function(options) {
   this.play = function() {
     if (loadingContainer == null) init();
     if (ct == null) ct = document.body;
-    if (options.hasMask) ct.appendChild(mask);
-    ct.appendChild(loadingContainer);
+    if (options.hasMask && mask.parentNode == null) ct.appendChild(mask);
+    if (loadingContainer.parentNode == null) ct.appendChild(loadingContainer);
 
     window.clearInterval(timer);
     timer = setInterval(function() {

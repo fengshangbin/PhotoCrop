@@ -1,7 +1,7 @@
 import { prevent, css, isMobile } from '../lib/utils';
 import cropDrag from '../lib/drag';
 import AlloyFinger from 'alloyfinger';
-import { show } from './utils';
+import { show, getOrientation } from './utils';
 import { loaedPhotoModel, freeRatioModel, isHiResModel } from './models';
 import core from './core';
 
@@ -165,7 +165,7 @@ function init(_view, _loadingUI) {
   };
 }
 
-function loadPhoto(photoURL) {
+function loadPhoto(photoURL, orientation) {
   //console.log(photoURL);
   if (/^blob:/i.test(photoURL) == false) file = null;
   loadingUI.play();
@@ -173,7 +173,7 @@ function loadPhoto(photoURL) {
   img.crossOrigin = 'anonymous';
   img.onload = function() {
     loadingUI.stop();
-    core.setPhotoSize(img.width, img.height);
+    core.setPhotoSize(img.width, img.height, orientation);
     view.querySelector('#crop_photo_bg').src = photoURL;
     view.querySelector('#crop_photo_inner').src = photoURL;
     loaedPhotoModel.setStatus(true);
@@ -192,8 +192,15 @@ function readFile(_file) {
   file = _file;
   if (URL) {
     if (file && /^image\/\w+/.test(file.type)) {
+      loadingUI.play();
       var blobURL = URL.createObjectURL(file);
-      loadPhoto(blobURL);
+      var fileReader = new FileReader();
+      fileReader.onload = function(e) {
+        var orientation = getOrientation(e.target.result);
+        loadPhoto(blobURL, orientation);
+        fileReader = null;
+      };
+      fileReader.readAsArrayBuffer(file);
     } else {
       window.alert('Please choose an image file.');
     }
