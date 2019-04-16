@@ -2,7 +2,7 @@
 
 PhotoCrop is JS library for photo crop  
 PhotoCrop 是一个裁剪图片的 js 组件  
-GitHub Pages: https://github.com/fengshangbin/ListView
+GitHub Pages: https://github.com/fengshangbin/PhotoCrop
 
 # 设计理念
 
