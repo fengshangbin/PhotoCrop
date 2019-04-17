@@ -9,7 +9,7 @@ import menuUI from './menuView';
 import core from './core';
 
 var view = document.createElement('div');
-view.innerHTML = isMobile() ? html : html.replace('tipMobile', 'tip');
+view.innerHTML = isMobile() ? html.replace('contenteditable', '') : html.replace('tipMobile', 'tip');
 
 var loadingUI = new SVGLoading({ textColor: '#ccc', textDefault: 'waiting' });
 
@@ -161,6 +161,7 @@ export function open(options) {
     changeLanguage(options.language);
     if (options.title) view.querySelector('.crop-heard span').innerHTML = options.title;
     else setI18nView(view.querySelector('.crop-heard span'), options.language);
+    setI18nView(view.querySelector('#crop_input_photo_tip span'), options.language);
     document.body.appendChild(view);
     cropUI.onCropAreaShow();
   }

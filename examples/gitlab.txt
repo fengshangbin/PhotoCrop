@@ -1,3 +1,0 @@
-docker pull gitlab/gitlab-ce
-mkdir -p /home/gitlab/config && mkdir -p /home/gitlab/logs && mkdir -p /home/gitlab/data
-docker run -d  -p 8822:22 -p 8888:80 -p 8443:443 --volume /home/gitlab/config:/etc/gitlab  --volume /home/gitlab/logs:/var/log/gitlab --volume /home/gitlab/data:/var/opt/gitlab  --restart always  --name gitlab gitlab/gitlab-ce
