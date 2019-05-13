@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 //const ZopfliWebpackPlugin = require('zopfli-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 let common = {
@@ -72,7 +73,19 @@ let common = {
     })
   );
 } */
-module.exports = common;
+//module.exports = common;
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    common.devtool = 'source-map';
+  }
+  if (argv.mode === 'production') {
+    common.optimization = {
+      minimizer: [new UglifyJsPlugin()]
+    };
+  }
+  return common;
+};
+
 /* module.exports = function(mode) {
   return [
     Object.assign({}, common, {

@@ -12,6 +12,7 @@ export var defaultOption = {
   ratio: ['1:1', '1:2', '2:3'],
   fullshow: true,
   title: null,
+  openCamera: false, //直接打开摄像头拍照，只有非多选模式并且移动端生效
   gap: 20,
   mimimum: 20
 };

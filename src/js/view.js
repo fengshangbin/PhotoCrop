@@ -42,7 +42,7 @@ export function browserFileHandle() {
   if (c3photocropinput) c3photocropinput.click();
 }
 
-function buildC3photocropinput(multiple) {
+function buildC3photocropinput(multiple, openCamera) {
   clearInput();
   var inputID = 'c3photocropinput' + new Date().getTime();
   c3photocropinput = document.createElement('input');
@@ -50,6 +50,7 @@ function buildC3photocropinput(multiple) {
   c3photocropinput.type = 'file';
   c3photocropinput.accept = 'image/*';
   if (multiple) c3photocropinput.multiple = 'multiple';
+  if (openCamera) c3photocropinput.capture = 'camera';
   c3photocropinput.style.display = 'none';
   //c3photocropinput.class = '_c3photocropinputimage';
   view.appendChild(c3photocropinput);
@@ -79,7 +80,7 @@ function setI18nView(i18nView, lan) {
 
 export function open(options) {
   options.multiple = options.liteMode && options.multiple && options.defaultPhoto == null;
-  buildC3photocropinput(options.multiple);
+  buildC3photocropinput(options.multiple, options.openCamera);
 
   cropCallback = options.success;
   var outwh = options.cropSize.split('x');
