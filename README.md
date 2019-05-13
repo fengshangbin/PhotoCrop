@@ -56,6 +56,7 @@ var defaultOption = {
   ratio: ['1:1', '1:2', '2:3'], //自选宽高比的选项
   fullshow: true, //是否强制填满裁剪区域
   title: null, //标题
+  openCamera: false, //直接打开摄像头拍照，只有非多选模式并且移动端生效
   gap: 20, //边距
   mimimum: 20
 };
