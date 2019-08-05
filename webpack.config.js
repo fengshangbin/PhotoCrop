@@ -6,9 +6,10 @@ const webpack = require('webpack');
 
 let common = {
   //mode: 'production', //development, production
-  entry: {
+  /* entry: {
     c3photocrop: './index.js'
-  },
+  }, */
+  entry: './index.js',
   plugins: [new CleanWebpackPlugin(['dist']), new webpack.BannerPlugin(' c3photocrop.js \n by fengshangbin 2018-12-27 \n https://github.com/fengshangbin/PhotoCrop \n H5 Photo Crop Component')],
   devServer: {
     contentBase: './examples',
@@ -55,10 +56,11 @@ let common = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/dist/',
-    filename: '[name].js',
+    filename: 'c3photocrop.js',
+    library: 'C3PhotoCrop', // This is the var name in browser
     libraryTarget: 'umd',
-    //libraryExport: 'default',
-    library: 'C3PhotoCrop' // This is the var name in browser
+    auxiliaryComment: 'Test Comment'
+    //libraryExport: 'default'
   }
 };
 

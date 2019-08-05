@@ -1,6 +1,6 @@
 import { extend } from './utils';
 
-var SVGLoading = function(options) {
+export default function SVGLoading(options) {
   options = extend(
     {
       ct: null,
@@ -108,10 +108,10 @@ var SVGLoading = function(options) {
   };
   //init();
   return this;
-};
+}
 
-if (typeof module !== 'undefined' && typeof exports === 'object') {
+/* if (typeof module !== 'undefined' && typeof exports === 'object') {
   module.exports = SVGLoading;
 } else {
   window.SVGLoading = SVGLoading;
-}
+} */
