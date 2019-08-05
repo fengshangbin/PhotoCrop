@@ -58,8 +58,7 @@ let common = {
     publicPath: '/dist/',
     filename: 'c3photocrop.js',
     library: 'C3PhotoCrop', // This is the var name in browser
-    libraryTarget: 'umd',
-    auxiliaryComment: 'Test Comment'
+    libraryTarget: 'umd'
     //libraryExport: 'default'
   }
 };
