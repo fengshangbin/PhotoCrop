@@ -256,7 +256,7 @@ function addTransition(hasTransition) {
     window.clearTimeout(transitionID);
     transitionID = window.setTimeout(function() {
       addTransition(false);
-    });
+    }, 150);
   } else {
     view.querySelectorAll('#crop_photo_bg, #crop_photo_inner, #crop_area').removeClass('crop-transition');
   }
