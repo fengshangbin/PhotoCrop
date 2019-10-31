@@ -25,7 +25,7 @@ function init(_view, browserFileHandle) {
     prevent(e);
     return false;
   });
-  view.querySelectorAll('#crop_change_btn, #crop_input_photo_tip').addEventListener('click', browserFileHandle);
+  view.querySelectorAll('#crop_change_btn, #crop_input_photo_tip').addEventListener(_cropMouseUp, browserFileHandle);
 
   view.querySelector('#crop_ratio_btn').addEventListener('click', showRatioSelect);
   function showRatioSelect() {

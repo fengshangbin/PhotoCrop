@@ -180,7 +180,7 @@ function loadPhoto(photoURL, orientation) {
   };
   img.onerror = function() {
     loadingUI.stop();
-    alert('Can not load this photo.');
+    //alert('Can not load this photo.');
   };
   img.src = photoURL;
 }

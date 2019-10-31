@@ -26,6 +26,7 @@
       }
     </style>
     <script src="dist/c3photocrop.js"></script>
+    <script src="fastclick.js"></script>
   </head>
 
   <body>
@@ -156,6 +157,11 @@
         });
         //}
         btn.parentNode.insertBefore(photo, btn);
+      }
+      if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+          FastClick.attach(document.body);
+        }, false);
       }
     </script>
   </body>
