@@ -267,13 +267,13 @@ var HAS_ALPHA = true,
 
 function initWorkerMessage() {
   self.onmessage = function(event) {
-    console.log('Work thread received message', Date.now());
+    //console.log('Work thread received message', Date.now());
     scale(event.data.sw, event.data.sh, event.data.dw, event.data.dh, event.data.sourceBuffer, event.data.imageData);
     self.postMessage(event.data.imageData);
     self.close();
   };
 }
-var workerJS = initWorkerMessage.toString() + ';initWorkerMessage()';
+var workerJS = initWorkerMessage.toString() + ';'+initWorkerMessage.name+'()';
 
 var blob = new Blob([scale.toString(), workerJS], { type: 'text/javascript' });
 var url = window.URL.createObjectURL(blob);

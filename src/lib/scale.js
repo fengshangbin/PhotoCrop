@@ -32,7 +32,7 @@ export default function _cropscale(scale, input, callback) {
   var worker = new Worker(scaleWorkerURL);
   worker.onmessage = function (event) {
     // e.data === 'some message'
-    console.log('Main thread received message', Date.now());
+    //console.log('Main thread received message', Date.now());
     //worker.postMessage('hello worker 2');
     //imageData.data = event.data;
     newCtx.putImageData(event.data, 0, 0);
