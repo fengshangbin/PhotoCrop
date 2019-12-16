@@ -352,7 +352,7 @@ function getCropArea() {
   return { x: -cropX, y: -cropY, w: cropW, h: cropH, rotate: rotate };
 }
 
-function createPhotoCanvas(source, x, y, w, h, rotate, outWidth, outHeight) {
+function createPhotoCanvas(source, x, y, w, h, rotate, outWidth, outHeight, callback) {
   var canvas = document.createElement('canvas');
   var r = Math.max(w, h);
   if (rotate == 90 || rotate == 270) {
@@ -373,9 +373,9 @@ function createPhotoCanvas(source, x, y, w, h, rotate, outWidth, outHeight) {
   } else {
     ctx.drawImage(source, x, y, w, h, 0, 0, w, h);
   }
-  var outCanvas = cropscale({ width: Math.floor(outWidth), height: Math.floor(outHeight) }, canvas);
-  canvas = null;
-  return outCanvas;
+  cropscale({ width: Math.floor(outWidth), height: Math.floor(outHeight) }, canvas, callback);
+  /* canvas = null;
+  return outCanvas; */
 }
 
 function createThumbCanvas(source, ow, oh, aw, ah) {
@@ -403,40 +403,48 @@ function exportPhotoData(img, file, callback) {
   var cropData = getCropArea();
   var data, thumb, thumbCanvas;
   if (isHiResModel.getStatus() == false || file == null) {
-    var dataCanvas = createPhotoCanvas(img, cropData.x, cropData.y, cropData.w, cropData.h, cropData.rotate, outWidth, outHeight);
-    if (photoExt == 'jpg') {
-      data = toDataJpg(dataCanvas);
-    } else {
-      data = dataCanvas.toDataURL();
-    }
-    thumb = exportThumbData(dataCanvas, 0, 0, outWidth, outHeight);
-    cropPhotoCallBack(data, thumb, file || img.src, callback);
+    createPhotoCanvas(img, cropData.x, cropData.y, cropData.w, cropData.h, cropData.rotate, outWidth, outHeight, function(dataCanvas){
+      if (photoExt == 'jpg') {
+        data = toDataJpg(dataCanvas);
+      } else {
+        data = dataCanvas.toDataURL();
+      }
+      exportThumbData(dataCanvas, 0, 0, outWidth, outHeight, function(thumb){
+        cropPhotoCallBack(data, thumb, file || img.src, callback);
+      });
+    });
+    
   } else {
     var reader = new FileReader();
     reader.onload = function(e) {
       data = e.target.result;
-      thumb = exportThumbData(img, 0, 0, outWidth, outHeight);
-      cropPhotoCallBack(data, thumb, file, callback);
+      exportThumbData(img, 0, 0, outWidth, outHeight, function(thumb){
+        cropPhotoCallBack(data, thumb, file, callback);
+      });
       reader = null;
     };
     reader.readAsDataURL(file);
   }
 }
 
-function exportThumbData(source, x, y, w, h) {
-  if (thumbWidth == 0 || thumbHeight == 0) return null;
+function exportThumbData(source, x, y, w, h, callback) {
+  if (thumbWidth == 0 || thumbHeight == 0) {
+    callback(null);
+    return;
+  }
   var ttw = Math.max(Math.ceil((outWidth * thumbHeight) / outHeight), thumbWidth);
   var tth = Math.max(Math.ceil((outHeight * thumbWidth) / outWidth), thumbHeight);
-  var thumbCanvas = createPhotoCanvas(source, x, y, w, h, 0, ttw, tth);
-  thumbCanvas = createThumbCanvas(thumbCanvas, ttw, tth, thumbWidth, thumbHeight);
-  var data;
-  if (photoExt == 'jpg') {
-    data = toDataJpg(thumbCanvas);
-  } else {
-    data = thumbCanvas.toDataURL();
-  }
-  thumbCanvas = null;
-  return data;
+  createPhotoCanvas(source, x, y, w, h, 0, ttw, tth, function(thumbCanvas){
+    thumbCanvas = createThumbCanvas(thumbCanvas, ttw, tth, thumbWidth, thumbHeight);
+    var data;
+    if (photoExt == 'jpg') {
+      data = toDataJpg(thumbCanvas);
+    } else {
+      data = thumbCanvas.toDataURL();
+    }
+    thumbCanvas = null;
+    callback(data);
+  });
 }
 
 function cropPhotoCallBack(data, thumb, file, callback) {
