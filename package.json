@@ -2,7 +2,6 @@
   "name": "c3photocrop",
   "version": "1.0.0",
   "description": "Photocrop is a JS library for photo crop",
-  "private": true,
   "main": "dist/photocrop.js",
   "dependencies": {
     "alloyfinger": "^0.1.16"
