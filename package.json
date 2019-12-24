@@ -1,5 +1,5 @@
 {
-  "name": "photocrop",
+  "name": "c3photocrop",
   "version": "1.0.0",
   "description": "Photocrop is a JS library for photo crop",
   "private": true,
@@ -32,7 +32,7 @@
     "type": "git",
     "url": "git+https://github.com/fengshangbin/PhotoCrop.git"
   },
-  "keywords": [],
+  "keywords": ["photo", "crop"],
   "author": "fengshangbin",
   "license": "MIT",
   "bugs": {
