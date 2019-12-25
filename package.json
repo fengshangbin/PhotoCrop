@@ -1,6 +1,6 @@
 {
   "name": "c3photocrop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Photocrop is a JS library for photo crop",
   "main": "dist/c3photocrop.js",
   "dependencies": {
@@ -31,7 +31,10 @@
     "type": "git",
     "url": "git+https://github.com/fengshangbin/PhotoCrop.git"
   },
-  "keywords": ["photo", "crop"],
+  "keywords": [
+    "photo",
+    "crop"
+  ],
   "author": "fengshangbin",
   "license": "MIT",
   "bugs": {
