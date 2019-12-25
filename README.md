@@ -32,6 +32,19 @@ C3PhotoCrop.crop({
     }
 });
 ```
+或
+```
+npm i c3photocrop -S
+
+import {crop} from "c3photocrop";
+
+crop({
+    cropSize: '300x250',
+    success: function(data) {
+        img.src = 'data:image/jpeg;base64,' + data.data;
+    }
+});
+```
 
 [示例](http://www.fengshangbin.com/html/c3photocrop/)  
 示例二维码  
