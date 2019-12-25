@@ -2,7 +2,7 @@
   "name": "c3photocrop",
   "version": "1.0.0",
   "description": "Photocrop is a JS library for photo crop",
-  "main": "dist/photocrop.js",
+  "main": "dist/c3photocrop.js",
   "dependencies": {
     "alloyfinger": "^0.1.16"
   },
@@ -37,5 +37,5 @@
   "bugs": {
     "url": "https://github.com/fengshangbin/PhotoCrop/issues"
   },
-  "homepage": "https://www.fengshangbin.com/"
+  "homepage": "https://www.fengshangbin.com"
 }
