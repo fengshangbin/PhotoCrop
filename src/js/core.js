@@ -47,7 +47,7 @@ function init(option) {
 }
 
 function restorePhoto(_rotate) {
-  rotate = _rotate ? _rotate : orientation;
+  rotate = _rotate!=undefined ? _rotate : orientation;
 
   if (ow == 0 || oh == 0) return;
 
