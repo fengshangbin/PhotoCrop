@@ -22,7 +22,10 @@ export function removeExifRotateInfo(file, callback) {
   var blobURL = URL.createObjectURL(file);
   var fileReader = new FileReader();
   fileReader.onload = function (e) {
-    var rotate = getOrientation(e.target.result);
+    var orientationAndPixelDimension = getOrientationAndPixelDimension(e.target.result);
+    var rotate = orientationAndPixelDimension.orientation;
+    var pixelXDimension = orientationAndPixelDimension.pixelXDimension;
+    var pixelYDimension = orientationAndPixelDimension.pixelYDimension;
     if (rotate > 0) {
       if (rotate == 3) rotate = 180;
       else if (rotate == 6) rotate = 90;
@@ -36,8 +39,8 @@ export function removeExifRotateInfo(file, callback) {
         var h = img.height;
         var x = 0;
         var y = 0;
-        //alert(w+", "+ h+", "+rotate);
-        if(w>h && rotate!=0){
+        //alert(w + ", " + pixelXDimension + " | " + h + ", " + pixelYDimension + " | " + rotate);
+        if (w == pixelXDimension && h == pixelYDimension && rotate != 0) {
           /* w=h;
           h=img.width; */
           var canvas = document.createElement('canvas');
@@ -64,7 +67,7 @@ export function removeExifRotateInfo(file, callback) {
           var ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h); */
           callback(canvas.toDataURL());
-        }else{
+        } else {
           callback(blobURL);
         }
       };
@@ -98,7 +101,7 @@ function getStringFromCharCode(dataView, start, length) {
   return str;
 }
 
-export function getOrientation(arrayBuffer) {
+export function getOrientationAndPixelDimension(arrayBuffer) {
   var dataView = new DataView(arrayBuffer);
   var length = dataView.byteLength;
   var orientation;
@@ -140,25 +143,49 @@ export function getOrientation(arrayBuffer) {
       }
     }
   }
+  var exifIFDPointer, pixelXDimension, pixelYDimension;
   if (ifdStart) {
     length = dataView.getUint16(ifdStart, littleEndian);
 
     for (i = 0; i < length; i++) {
       offset = ifdStart + i * 12 + 2;
-      if (dataView.getUint16(offset, littleEndian) === 0x0112 /* Orientation */) {
+      /* Orientation */
+      if (dataView.getUint16(offset, littleEndian) === 0x0112) {
         // 8 is the offset of the current tag's value
         offset += 8;
-
         // Get the original orientation value
         orientation = dataView.getUint16(offset, littleEndian);
-
+        //console.log(orientation);
         // Override the orientation with its default value for Safari (#120)
         /* if (IS_SAFARI_OR_UIWEBVIEW) {
           dataView.setUint16(offset, 1, littleEndian);
         } */
-        break;
+        //break;
+      }
+      /* ExifIFDPointer */
+      if (dataView.getUint16(offset, littleEndian) === 0x8769) {
+        offset += 8;
+        exifIFDPointer = dataView.getUint32(offset, littleEndian);
+      }
+
+    }
+  }
+  if (exifIFDPointer) {
+    var tagStart = tiffOffset + exifIFDPointer;
+    length = dataView.getUint16(tagStart, littleEndian);
+    for (i = 0; i < length; i++) {
+      offset = tagStart + i * 12 + 2;
+      /* PixelXDimension */
+      if (dataView.getUint16(offset, littleEndian) === 0xA002) {
+        offset += 8;
+        pixelXDimension = dataView.getUint32(offset, littleEndian);
+      }
+      /* PixelYDimension */
+      if (dataView.getUint16(offset, littleEndian) === 0xA003) {
+        offset += 8;
+        pixelYDimension = dataView.getUint32(offset, littleEndian);
       }
     }
   }
-  return orientation;
+  return { orientation: orientation, pixelXDimension: pixelXDimension, pixelYDimension: pixelYDimension };
 }
