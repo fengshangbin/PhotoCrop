@@ -18,6 +18,77 @@ export function show(elements, state) {
   }
 }
 
+export function removeExifRotateInfo(file, callback) {
+  var blobURL = URL.createObjectURL(file);
+  var fileReader = new FileReader();
+  fileReader.onload = function (e) {
+    var rotate = getOrientation(e.target.result);
+    if (rotate > 0) {
+      if (rotate == 3) rotate = 180;
+      else if (rotate == 6) rotate = 90;
+      else if (rotate == 8) rotate = -90;
+      else rotate = 0;
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function () {
+        //core.setPhotoSize(img.width, img.height, orientation);
+        var w = img.width;
+        var h = img.height;
+        var x = 0;
+        var y = 0;
+        //alert(w+", "+ h+", "+rotate);
+        if(w>h && rotate!=0){
+          /* w=h;
+          h=img.width; */
+          var canvas = document.createElement('canvas');
+          if (rotate == 90 || rotate == 270) {
+            canvas.width = h;
+            canvas.height = w;
+          } else {
+            canvas.width = w;
+            canvas.height = h;
+          }
+          var ctx = canvas.getContext('2d');
+          ctx.translate(w / 2, h / 2);
+          ctx.rotate((rotate * Math.PI) / 180);
+          ctx.translate(-w / 2, -h / 2);
+          if (rotate == 90) {
+            ctx.drawImage(img, x, y, w, h, (w - h) / 2, (w - h) / 2, w, h);
+          } else if (rotate == 270) {
+            ctx.drawImage(img, x, y, w, h, (h - w) / 2, (h - w) / 2, w, h);
+          } else {
+            ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
+          }
+          /* canvas.width = w;
+          canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h); */
+          callback(canvas.toDataURL());
+        }else{
+          callback(blobURL);
+        }
+      };
+      img.src = blobURL;
+    } else {
+      callback(blobURL);
+    }
+    fileReader = null;
+  };
+  fileReader.readAsArrayBuffer(file);
+}
+
+export function base64ToArrayBuffer(base64) {
+  base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+  var binary = atob(base64);
+  var len = binary.length;
+  var buffer = new ArrayBuffer(len);
+  var view = new Uint8Array(buffer);
+  for (var i = 0; i < len; i++) {
+    view[i] = binary.charCodeAt(i);
+  }
+  return buffer;
+}
+
 function getStringFromCharCode(dataView, start, length) {
   var str = '';
   var i;

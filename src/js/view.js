@@ -17,13 +17,13 @@ var c3photocropinput;
 var currentLanguage = 'en';
 var cropCallback;
 
-view.querySelector('#crop_close_btn').addEventListener('click', function(e) {
+view.querySelector('#crop_close_btn').addEventListener('click', function (e) {
   close();
 });
-view.querySelector('#crop_done_btn').addEventListener('click', function(e) {
+view.querySelector('#crop_done_btn').addEventListener('click', function (e) {
   loadingUI.play();
-  window.setTimeout(function() {
-    core.exportPhotoData(cropUI.getImg(), cropUI.getFile(), function(result) {
+  window.setTimeout(function () {
+    core.exportPhotoData(cropUI.getImg(), cropUI.getFile(), function (result) {
       if (cropCallback) cropCallback(result);
       loadingUI.stop();
       close();
@@ -31,7 +31,7 @@ view.querySelector('#crop_done_btn').addEventListener('click', function(e) {
   }, 50);
 });
 
-loaedPhotoModel.addEventListener('change', function(e) {
+loaedPhotoModel.addEventListener('change', function (e) {
   disable(view.querySelector('#crop_done_btn'), e.data.status);
 });
 
@@ -55,7 +55,7 @@ function buildC3photocropinput(multiple, openCamera) {
   //c3photocropinput.class = '_c3photocropinputimage';
   view.appendChild(c3photocropinput);
   if (multiple == false) {
-    c3photocropinput.changeListener = function() {
+    c3photocropinput.changeListener = function () {
       cropUI.readFile(this.files[0]);
     };
     c3photocropinput.addEventListener('change', c3photocropinput.changeListener);
@@ -117,7 +117,7 @@ export function open(options) {
       var files = null,
         index = 0,
         results = [];
-      c3photocropinput.changeListener = function() {
+      c3photocropinput.changeListener = function () {
         files = this.files;
         next();
       };
@@ -125,7 +125,7 @@ export function open(options) {
       function autoDone(e) {
         if (e.data.status) {
           loadingUI.play();
-          core.exportPhotoData(cropUI.getImg(), cropUI.getFile(), function(result) {
+          core.exportPhotoData(cropUI.getImg(), cropUI.getFile(), function (result) {
             results.push(result);
             loadingUI.stop();
             next();
@@ -168,6 +168,7 @@ export function open(options) {
   }
 
   if (options.defaultPhoto != null) {
+    //console.log(options.defaultPhoto instanceof File, options.defaultPhoto);
     if (options.defaultPhoto instanceof File) {
       cropUI.readFile(options.defaultPhoto);
     } else {

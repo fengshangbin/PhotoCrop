@@ -1,7 +1,7 @@
 import { prevent, css, isMobile } from '../lib/utils';
 import cropDrag from '../lib/drag';
 import AlloyFinger from 'alloyfinger';
-import { show, getOrientation } from './utils';
+import { show, removeExifRotateInfo, getOrientation, base64ToArrayBuffer } from './utils';
 import { loaedPhotoModel, freeRatioModel, isHiResModel } from './models';
 import core from './core';
 
@@ -38,7 +38,7 @@ function init(_view, _loadingUI) {
       }
     }
   }
-  view.querySelector('#crop_input_photo_tip').addEventListener('paste', function(e) {
+  view.querySelector('#crop_input_photo_tip').addEventListener('paste', function (e) {
     prevent(e);
     var cbd = e.clipboardData;
     var ua = window.navigator.userAgent;
@@ -63,10 +63,10 @@ function init(_view, _loadingUI) {
     cropDrag.init({
       handler: view.querySelectorAll('#crop_drag, .crop_area_box'),
       root: view.querySelector('#crop_photo_bg'),
-      onDrag: function(x, y) {
+      onDrag: function (x, y) {
         core.setPhotoBgPosition(x, y);
       },
-      onDragEnd: function(x, y) {
+      onDragEnd: function (x, y) {
         core.checkLimitPosition();
       }
     });
@@ -75,11 +75,11 @@ function init(_view, _loadingUI) {
     var lastzZoom = 1;
     var cx, cy;
     var fingerOption = {
-      touchStart: function(evt) {
+      touchStart: function (evt) {
         if (touchstart) evt.preventDefault();
         touchstart = true;
       },
-      multipointStart: function(evt) {
+      multipointStart: function (evt) {
         var centerX = (evt.touches[0].pageX + evt.touches[1].pageX) / 2;
         var centerY = (evt.touches[0].pageY + evt.touches[1].pageY) / 2;
         lastzZoom = 1;
@@ -87,12 +87,12 @@ function init(_view, _loadingUI) {
         cx = centerX - areaRect.x;
         cy = centerY - areaRect.y;
       },
-      pinch: function(evt) {
+      pinch: function (evt) {
         var deltaZoom = evt.zoom / lastzZoom;
         lastzZoom = evt.zoom;
         core.zoomPerPhoto(deltaZoom, cx, cy);
       },
-      pressMove: function(evt) {
+      pressMove: function (evt) {
         var root = view.querySelector('#crop_photo_bg');
         var x = parseFloat(cropDrag.transZRegexX.exec(root.style.transform)[1] || 0);
         var y = parseFloat(cropDrag.transZRegexY.exec(root.style.transform)[1] || 0);
@@ -102,7 +102,7 @@ function init(_view, _loadingUI) {
         core.setPhotoBgPosition(nx, ny);
         evt.preventDefault();
       },
-      touchEnd: function(evt) {
+      touchEnd: function (evt) {
         core.checkLimitPosition();
         touchstart = false;
       }
@@ -114,7 +114,7 @@ function init(_view, _loadingUI) {
   cropDrag.init({
     handler: view.querySelectorAll('.crop_line_t, .crop_line_r, .crop_line_b, .crop_line_l, .crop_coner_lt, .crop_coner_rt, .crop_coner_lb, .crop_coner_rb'),
     isLock: true,
-    onDrag: function(x, y) {
+    onDrag: function (x, y) {
       var target = this;
       var isTop = false;
       var isBootom = false;
@@ -134,12 +134,12 @@ function init(_view, _loadingUI) {
       }
       core.changeBorder(x, y, isTop, isBootom, isLeft, isRight);
     },
-    onDragEnd: function() {
+    onDragEnd: function () {
       core.releaseCropArea();
     }
   });
   var mouseWheelNumber;
-  view.querySelectorAll('#crop_drag, #crop_area').addEventListener('mousewheel', function(e) {
+  view.querySelectorAll('#crop_drag, #crop_area').addEventListener('mousewheel', function (e) {
     if (isHiResModel.getStatus()) return;
     prevent(e);
     var delta = e.wheelDelta || (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) || (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));
@@ -150,15 +150,15 @@ function init(_view, _loadingUI) {
     window.setTimeout(core.checkLimitPosition, 100);
   });
 
-  loaedPhotoModel.addEventListener('change', function(e) {
+  loaedPhotoModel.addEventListener('change', function (e) {
     var hasPhoto = e.data.status;
     show(view.querySelectorAll('#crop_area, #crop_photo_bg'), hasPhoto);
     show(view.querySelector('#crop_input_photo_tip'), !hasPhoto);
   });
-  freeRatioModel.addEventListener('change', function(e) {
+  freeRatioModel.addEventListener('change', function (e) {
     show(view.querySelectorAll('.crop_line_t, .crop_line_r, .crop_line_b, .crop_line_l, .crop_coner_lt, .crop_coner_rt, .crop_coner_lb, .crop_coner_rb'), e.data.status);
   });
-  window.onresize = function() {
+  window.onresize = function () {
     if (view.parentNode) {
       onCropAreaShow();
     }
@@ -166,19 +166,19 @@ function init(_view, _loadingUI) {
 }
 
 function loadPhoto(photoURL, orientation) {
-  //console.log(photoURL);
-  if (/^blob:/i.test(photoURL) == false) file = null;
+  //if (/^blob:/i.test(photoURL) == false) file = null;
+  if (orientation == null) file = null;
   loadingUI.play();
   img = new Image();
   img.crossOrigin = 'anonymous';
-  img.onload = function() {
+  img.onload = function () {
     loadingUI.stop();
     core.setPhotoSize(img.width, img.height, orientation);
     view.querySelector('#crop_photo_bg').src = photoURL;
     view.querySelector('#crop_photo_inner').src = photoURL;
     loaedPhotoModel.setStatus(true);
   };
-  img.onerror = function() {
+  img.onerror = function () {
     loadingUI.stop();
     //alert('Can not load this photo.');
   };
@@ -193,14 +193,30 @@ function readFile(_file) {
   if (URL) {
     if (file && /^image\/\w+/.test(file.type)) {
       loadingUI.play();
-      var blobURL = URL.createObjectURL(file);
-      var fileReader = new FileReader();
-      fileReader.onload = function(e) {
-        var orientation = getOrientation(e.target.result);
-        loadPhoto(blobURL, orientation);
+      //var blobURL = URL.createObjectURL(file);
+      removeExifRotateInfo(file, function (base64) {
+        loadPhoto(base64, 0);
+        /* var fileReader = new FileReader();
+        fileReader.onload = function (e) {
+          var orientation = getOrientation(e.target.result);
+          //alert(orientation);
+          loadPhoto(base64, orientation);
+          //loadPhoto(blobURL);
+          fileReader = null;
+        };
+        fileReader.readAsArrayBuffer(file); */
+      })
+      /* var fileReader = new FileReader();
+      fileReader.onload = function (e) {
+         var base64 = e.target.result;
+         var arrayBuffer = base64ToArrayBuffer(base64);
+         var orientation = getOrientation(arrayBuffer);
+         //alert(orientation);
+         loadPhoto(base64, orientation);
+        //loadPhoto(blobURL);
         fileReader = null;
       };
-      fileReader.readAsArrayBuffer(file);
+      fileReader.readAsDataURL(file); */
     } else {
       window.alert('Please choose an image file.');
     }
@@ -254,7 +270,7 @@ function addTransition(hasTransition) {
   if (hasTransition) {
     view.querySelectorAll('#crop_photo_bg, #crop_photo_inner, #crop_area').addClass('crop-transition');
     window.clearTimeout(transitionID);
-    transitionID = window.setTimeout(function() {
+    transitionID = window.setTimeout(function () {
       addTransition(false);
     }, 150);
   } else {
