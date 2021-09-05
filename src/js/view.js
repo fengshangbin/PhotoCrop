@@ -162,7 +162,8 @@ export function open(options) {
     changeLanguage(options.language);
     if (options.title) view.querySelector('.crop-heard span').innerHTML = options.title;
     else setI18nView(view.querySelector('.crop-heard span'), options.language);
-    setI18nView(view.querySelector('#crop_input_photo_tip span'), options.language);
+    //setI18nView(view.querySelector('#crop_input_photo_tip span'), options.language);
+    setI18nView(view.querySelector('.crop_input_photo_tip_span'), options.language);
     document.body.appendChild(view);
     cropUI.onCropAreaShow();
   }

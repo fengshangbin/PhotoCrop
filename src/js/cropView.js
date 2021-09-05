@@ -153,7 +153,7 @@ function init(_view, _loadingUI) {
   loaedPhotoModel.addEventListener('change', function (e) {
     var hasPhoto = e.data.status;
     show(view.querySelectorAll('#crop_area, #crop_photo_bg'), hasPhoto);
-    show(view.querySelector('#crop_input_photo_tip'), !hasPhoto);
+    show(view.querySelectorAll('#crop_input_photo_tip, .crop_input_photo_tip_span'), !hasPhoto);
   });
   freeRatioModel.addEventListener('change', function (e) {
     show(view.querySelectorAll('.crop_line_t, .crop_line_r, .crop_line_b, .crop_line_l, .crop_coner_lt, .crop_coner_rt, .crop_coner_lb, .crop_coner_rb'), e.data.status);

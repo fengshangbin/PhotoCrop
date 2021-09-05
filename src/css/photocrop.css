@@ -87,8 +87,7 @@
   position: absolute;
 }
 #crop_input_photo_tip {
-  font-size: 16px;
-  color: #fff;
+  /* font-size: 16px; */
   cursor: pointer;
   position: absolute;
   left: 0;
@@ -102,6 +101,15 @@
   outline: none;
   -webkit-tap-highlight-color: #000000;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.crop_input_photo_tip_span {
+  font-size: 16px;
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 #crop_drag {
   background-color: rgba(0, 0, 0, 0.5);
@@ -182,7 +190,7 @@
   height: 10px;
   border-radius: 50%;
   background: #4395ff;
-  content: '';
+  content: "";
   position: absolute;
   left: 3px;
   top: 3px;
