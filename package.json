@@ -1,6 +1,6 @@
 {
   "name": "c3photocrop",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Photocrop is a JS library for photo crop",
   "main": "dist/c3photocrop.js",
   "dependencies": {
