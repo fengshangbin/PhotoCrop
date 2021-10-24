@@ -148,7 +148,7 @@ function init(_view, _loadingUI) {
     core.zoomPerPhoto(delta > 0 ? 1.1 : 0.9, e.pageX - areaRect.x, e.pageY - areaRect.y);
     window.clearTimeout(mouseWheelNumber);
     window.setTimeout(core.checkLimitPosition, 100);
-  });
+  }, {passive: false});
 
   loaedPhotoModel.addEventListener('change', function (e) {
     var hasPhoto = e.data.status;
